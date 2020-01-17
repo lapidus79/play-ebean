@@ -1,5 +1,8 @@
 import sbt.inc.Analysis
 import interplay.ScalaVersions.scala212
+import sbt.Keys.organization
+import sbt.ThisBuild
+
 
 val scala213 = "2.13.1"
 val Versions = new {
@@ -10,22 +13,56 @@ val Versions = new {
   val typesafeConfig = "1.3.4"
 }
 
+organization := "io.github.lapidus79"
+
 lazy val root = project
   .in(file("."))
   .enablePlugins(PlayRootProject, CrossPerProjectPlugin)
   .aggregate(core, plugin)
   .settings(
     name := "play-ebean-root",
-    releaseCrossBuild := true
+    releaseCrossBuild := true,
+    organization := "io.github.lapidus79"
+  )
+  .settings(
+    credentials += Credentials(
+      "Sonatype Nexus Repository Manager",
+      "oss.sonatype.org",
+      System.getenv("OSS_ST_USERNAME"),
+      System.getenv("OSS_ST_PASSWORD")
+    ),
+    publishTo := {
+      val nexus = "https://oss.sonatype.org/"
+      if (isSnapshot.value)
+        Some("snapshots" at nexus + "content/repositories/snapshots")
+      else
+        Some("releases" at nexus + "service/local/staging/deploy/maven2")
+    }
   )
 
 lazy val core = project
   .in(file("play-ebean"))
   .enablePlugins(Playdoc, PlayLibrary, JacocoPlugin)
   .settings(
+    credentials += Credentials(
+      "Sonatype Nexus Repository Manager",
+      "oss.sonatype.org",
+      System.getenv("OSS_ST_USERNAME"),
+      System.getenv("OSS_ST_PASSWORD")
+    ),
+    publishTo := {
+      val nexus = "https://oss.sonatype.org/"
+      if (isSnapshot.value)
+        Some("snapshots" at nexus + "content/repositories/snapshots")
+      else
+        Some("releases" at nexus + "service/local/staging/deploy/maven2")
+    }
+  )
+  .settings(
     name := "play-ebean",
     crossScalaVersions := Seq(scala212, scala213),
     libraryDependencies ++= playEbeanDeps,
+    organization := "io.github.lapidus79",
     compile in Compile := enhanceEbeanClasses(
       (dependencyClasspath in Compile).value,
       (compile in Compile).value,
@@ -39,8 +76,23 @@ lazy val plugin = project
   .in(file("sbt-play-ebean"))
   .enablePlugins(PlaySbtPlugin)
   .settings(
+    credentials += Credentials(
+      "Sonatype Nexus Repository Manager",
+      "oss.sonatype.org",
+      System.getenv("OSS_ST_USERNAME"),
+      System.getenv("OSS_ST_PASSWORD")
+    ),
+    publishTo := {
+      val nexus = "https://oss.sonatype.org/"
+      if (isSnapshot.value)
+        Some("snapshots" at nexus + "content/repositories/snapshots")
+      else
+        Some("releases" at nexus + "service/local/staging/deploy/maven2")
+    }
+  )
+  .settings(
     name := "sbt-play-ebean",
-    organization := "com.typesafe.sbt",
+    organization := "io.github.lapidus79",
     libraryDependencies ++= sbtPlayEbeanDeps,
 
     libraryDependencies ++= Seq(
@@ -114,3 +166,9 @@ def generateVersionFile = Def.task {
   IO.write(file, content)
   Seq(file)
 }
+
+
+// Notes
+// sbt clean compile
+// sbt +publishLocal +plugin/test +plugin/scripted
+// sbt +publish +plugin/test +plugin/scripted

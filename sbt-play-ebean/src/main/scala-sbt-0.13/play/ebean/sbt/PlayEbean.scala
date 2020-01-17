@@ -40,7 +40,7 @@ object PlayEbean extends AutoPlugin {
     playEbeanDebugLevel := -1,
     playEbeanAgentArgs := Map("debug" -> playEbeanDebugLevel.value.toString),
     playEbeanVersion := readResourceProperty("play-ebean.version.properties", "play-ebean.version"),
-    libraryDependencies += "com.typesafe.play" %% "play-ebean" % playEbeanVersion.value
+    libraryDependencies += "io.github.lapidus79" %% "play-ebean" % playEbeanVersion.value
   )
 
   def ebeanEnhance: Def.Initialize[Task[Compiler.CompileResult]] = Def.task {
