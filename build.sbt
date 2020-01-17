@@ -1,13 +1,13 @@
 import sbt.inc.Analysis
 import interplay.ScalaVersions.scala212
 
-val scala213 = "2.13.0"
+val scala213 = "2.13.1"
 val Versions = new {
-  val play: String = playVersion(sys.props.getOrElse("play.version", "2.7.3"))
+  val play: String = playVersion(sys.props.getOrElse("play.version", "2.8.0"))
   val playEnhancer = "1.2.2"
-  val ebean = "11.33.2"
-  val ebeanAgent = "11.27.1"
-  val typesafeConfig = "1.3.3"
+  val ebean = "11.45.1"
+  val ebeanAgent = "11.45.1"
+  val typesafeConfig = "1.3.4"
 }
 
 lazy val root = project
@@ -16,7 +16,7 @@ lazy val root = project
   .aggregate(core, plugin)
   .settings(
     name := "play-ebean-root",
-    releaseCrossBuild := false
+    releaseCrossBuild := true
   )
 
 lazy val core = project
