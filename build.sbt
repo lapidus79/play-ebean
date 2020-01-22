@@ -28,7 +28,8 @@ lazy val root = project
     name := "play-ebean-root",
     releaseCrossBuild := true,
     organization := "io.github.lapidus79",
-    homepage := Some(url(s"https://github.com/lapidus79/play-ebean"))
+    homepage := Some(url(s"https://github.com/lapidus79/play-ebean")),
+    sources in (Compile, doc) := Seq()
   )
   .settings(
     credentials += Credentials(
@@ -63,6 +64,7 @@ lazy val core = project
       else
         Some("releases" at nexus + "service/local/staging/deploy/maven2")
     },
+    sources in (Compile, doc) := Seq(),
     homepage := Some(url(s"https://github.com/lapidus79/play-ebean")),
     publishMavenStyle := true,
     publishArtifact in Test := false,
@@ -144,7 +146,7 @@ lazy val plugin = project
     organization := "io.github.lapidus79",
     libraryDependencies ++= sbtPlayEbeanDeps,
     useGpg := true,
-
+    sources in (Compile, doc) := Seq(),
     libraryDependencies ++= Seq(
       sbtPluginDep("com.typesafe.sbt" % "sbt-play-enhancer" % Versions.playEnhancer, (sbtVersion in pluginCrossBuild).value, scalaVersion.value),
       sbtPluginDep("com.typesafe.play" % "sbt-plugin" % Versions.play, (sbtVersion in pluginCrossBuild).value, scalaVersion.value)
