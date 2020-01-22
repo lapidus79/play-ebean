@@ -50,7 +50,8 @@ object PlayEbean extends AutoPlugin {
     playEbeanDebugLevel := -1,
     playEbeanAgentArgs := Map("debug" -> playEbeanDebugLevel.value.toString),
     playEbeanVersion := readResourceProperty("play-ebean.version.properties", "play-ebean.version"),
-    libraryDependencies += "io.github.lapidus79" %% "play-ebean" % playEbeanVersion.value
+    libraryDependencies += "io.github.lapidus79" %% "play-ebean" % playEbeanVersion.value,
+    libraryDependencies += "org.glassfish.jaxb" % "jaxb-runtime" % "2.3.2"
   )
 
   // This is replacement of old Stamp `Exists` representation

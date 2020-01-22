@@ -7,7 +7,7 @@ package play.ebean.sbt
 import java.net.URLClassLoader
 
 import com.typesafe.play.sbt.enhancer.PlayEnhancer
-import sbt.Keys._
+import sbt.Keys.{libraryDependencies, _}
 import sbt._
 import sbt.inc._
 
@@ -40,7 +40,8 @@ object PlayEbean extends AutoPlugin {
     playEbeanDebugLevel := -1,
     playEbeanAgentArgs := Map("debug" -> playEbeanDebugLevel.value.toString),
     playEbeanVersion := readResourceProperty("play-ebean.version.properties", "play-ebean.version"),
-    libraryDependencies += "io.github.lapidus79" %% "play-ebean" % playEbeanVersion.value
+    libraryDependencies += "io.github.lapidus79" %% "play-ebean" % playEbeanVersion.value,
+    libraryDependencies += "org.glassfish.jaxb" % "jaxb-runtime" % "2.3.2"
   )
 
   def ebeanEnhance: Def.Initialize[Task[Compiler.CompileResult]] = Def.task {
