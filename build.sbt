@@ -6,10 +6,10 @@ import sbt.ThisBuild
 
 val scala213 = "2.13.1"
 val Versions = new {
-  val play: String = playVersion(sys.props.getOrElse("play.version", "2.8.2"))
+  val play: String = playVersion(sys.props.getOrElse("play.version", "2.8.8"))
   val playEnhancer = "1.2.2"
-  val ebean = "12.3.7"
-  val ebeanAgent = "12.3.4"
+  val ebean = "12.4.2" // when we switch to 12.5+/12.8.1 we need to include "io.ebean" % "ebean-ddl-generator" % Versions.ebean, as dep
+  val ebeanAgent = "12.4.2"
   val typesafeConfig = "1.3.4"
 }
 
@@ -171,6 +171,7 @@ playBuildExtraPublish := {
 lazy val ebeanDeps = Seq(
   "io.ebean" % "ebean" % Versions.ebean,
   "io.ebean" % "ebean-agent" % Versions.ebeanAgent
+  // "io.ebean" % "ebean-ddl-generator" % Versions.ebean
 )
 
 lazy val reflectionDeps = Seq(
@@ -221,6 +222,14 @@ def generateVersionFile = Def.task {
 
 
 // Notes
+// gpg contains key
+// make sure sonatype creds are set as env variables
+// make sure export GPG_TTY=$(tty) (otherwise https://github.com/keybase/keybase-issues/issues/2798)
 // sbt clean compile
 // sbt +publishLocal +plugin/test +plugin/scripted
 // sbt +publishSigned +plugin/test +plugin/scripted
+// once published you need to go to my sonatype and manually publish the release candidate
+// https://oss.sonatype.org/#welcome
+// Go to staging repositories
+// You then need to "close" the release candidate which will trigger scans
+// After success you can perform actual release
